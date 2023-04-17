@@ -1,0 +1,20 @@
+Si consideri il codice dato, che implementa un sistema con tre tipi di thread:
+produttori, consumatori e lettori.
+
+Il codice dato non e‘ corretto, poiche’ usa una coda che non e‘ thread-safe.
+
+Si modifichi la classe CodaCondivisa in modo che:
+
+• Produttori e consumatori e lettori si comportino nel solito modo, ferman-
+dosi se trovano la coda piena o vuota, rispettivamente.
+
+• I lettori leggano l’elemento il testa alla coda, ma non lo consumano, las-
+ciando la coda intatta. Analogamente ai consumatori, i lettori si fermano
+se la coda e‘ vuota.
+
+• Non ci siano corse critiche, deadlock o starvation.
+
+Inoltre si modifichino i thread lettori in modo che in caso di coda vuota non
+restino mai in attesa piu‘ di 500 ms. Se dopo 500 ms la coda e‘ ancora vuota,
+viene letto un valore convenzionale.
+18
