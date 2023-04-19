@@ -1,4 +1,6 @@
 package traccia;
+import soluzionethread.Giocatore;
+
 import java.util.Random;
 public class MainGioco {
 	static final int numGiocatori=4;

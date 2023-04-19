@@ -1,0 +1,6 @@
+-Es.1
+Per risolvere il primo esercizio bisogna operare sulla classe Coda.
+Si rendono i metodi getItem, setItem, readItem synchronized.
+Poi si sostituiscono gli if con cicli while stando attenti alle condizioni (che sono da modificare)
+All'interno dei while si fanno le opportune chiamate wait().
+Alla fine dei metodi citati, si esegue una notifyAll().
