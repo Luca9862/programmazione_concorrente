@@ -13,7 +13,11 @@ public class Consumatore extends Thread {
 	}
 	public void run(){
 		for(int i=0; i<numIterations; i++){
-			v=buffer.getItem();
+			try {
+				v=buffer.getItem();
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
 			try {
 				Thread.sleep(ThreadLocalRandom.current().nextInt(300));
 			} catch (InterruptedException e) { }

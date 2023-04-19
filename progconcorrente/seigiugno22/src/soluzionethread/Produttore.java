@@ -15,7 +15,11 @@ public class Produttore extends Thread {
 			try {
 				Thread.sleep(ThreadLocalRandom.current().nextInt(300));
 			} catch (InterruptedException e) { }
-			buffer.setItem(new Elemento("el_"+i, ThreadLocalRandom.current().nextInt(300)));
+			try {
+				buffer.setItem(new Elemento("el_"+i, ThreadLocalRandom.current().nextInt(300)));
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
 		}
 		System.out.println(this.getName()+": termino");
 	}

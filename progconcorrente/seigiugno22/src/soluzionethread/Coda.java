@@ -14,40 +14,43 @@ public class Coda {
 	}
 	// stampa messaggio dato, preceduto dal nome del thread
 	void printWithName(String s, Elemento v) {
-		System.out.println(Thread.currentThread().getName()+s+v+"["+numItems+"]");		
+		System.out.println(Thread.currentThread().getName()+s+v+"["+numItems+"]");
 	}
 	// legge elemento estraendolo dalla testa della coda
-	public Elemento getItem(){
+	public synchronized Elemento getItem() throws InterruptedException {
 		Elemento tmp;
-		if (numItems==0){
-			tmp = new Elemento("boh", -1);
-		} else {
-			numItems--;
-			tmp=valori[first];
-			first=(first+1)%BUFFERSIZE;
+		while(numItems==0){
+			wait();
 		}
+		numItems--;
+		tmp=valori[first];
+		first=(first+1)%BUFFERSIZE;
 		printWithName(" estratto ", tmp);
+		notifyAll();
 		return tmp;
 	}
 	// inserisce elemento in coda
-	public void setItem(Elemento v) {
-		if (numItems!=BUFFERSIZE){
-			valori[last]=v;
-			last=(last+1)%BUFFERSIZE;
-			numItems++;
-			printWithName(" scritto ", v);
+	public synchronized void setItem(Elemento v) throws InterruptedException {
+		while(numItems==BUFFERSIZE){
+			wait();
 		}
+		valori[last]=v;
+		last=(last+1)%BUFFERSIZE;
+		numItems++;
+		printWithName(" scritto ", v);
+		notifyAll();
 	}
 	// legge elemento dalla testa della coda, senza fare modifiche alla coda
-	public Elemento readItem() {
+	public synchronized Elemento readItem() throws InterruptedException {
 		Elemento tmp;
-		if (numItems==0){
-			tmp = new Elemento("boh", -1);
-		} else {
-			tmp=valori[first];
+		while(numItems==0){
+			wait();
 		}
+		tmp=valori[first];
 		printWithName(" letto ", tmp);
+		notifyAll();
 		return tmp;
 	}
 }
+
 
