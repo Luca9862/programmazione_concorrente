@@ -2,6 +2,7 @@ package soluzionesocket;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.Objects;
 
 public class ServerThread extends Thread{
     Socket socket;
@@ -17,17 +18,17 @@ public class ServerThread extends Thread{
     }
     private void exec(String str) throws IOException, ClassNotFoundException, InterruptedException {
         int id = 0;
-        if(str == "aspetta turno"){
+        if(str.equals("aspetta")){
             id = (int)in.readObject();
             this.partita.aspettaTurno(id);
             out.writeObject(partita.leggiSituazione());
         }
-        if(str == "giocata"){
+        if(str.equals("giocata")){
             int mossa = (int) in.readObject();
             partita.giocata(id, mossa);
         }
 
-        if(str == "numMani"){
+        if(str.equals("numMani")){
             out.writeObject(partita.numMani());
         }
     }
@@ -39,7 +40,7 @@ public class ServerThread extends Thread{
         while(!finito){
             try {
                 str = (String) in.readObject();
-                if(str == "END")
+                if(str.equals("END"))
                     finito = true;
                 else
                     exec(str);
