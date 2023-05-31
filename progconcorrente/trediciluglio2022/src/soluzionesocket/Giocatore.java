@@ -1,5 +1,7 @@
 package soluzionesocket;
 
+import traccia.SituazionePartita;
+
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,47 +11,50 @@ import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.Random;
 
-public class Giocatore{
-	Partita laPartita;
+public class Giocatore {
 	int mioId;
 	Random rnd;
 
 	public Giocatore(int id) {
-		mioId=id;
-		rnd=new Random();
+		mioId = id;
+		rnd = new Random();
 	}
-	public void run(){
-		InetAddress addr = null;
-		try {
-			addr = InetAddress.getByName(null);
-			Socket socket = new Socket(addr, Integer.parseInt("8080"));
-			ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
-			ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-			out.writeObject("Stringa da passare:");
-			in.readObject();
-			out.writeObject("END");
-			out.flush();
-			socket.close();
-		} catch (IOException | ClassNotFoundException e) {
-			throw new RuntimeException(e);
-		}
 
-		int numMani=laPartita.numMani();
+	public void exec(int idGiocatore) throws IOException, ClassNotFoundException {
+		int numMani;
+		mioId = idGiocatore;
 		int miaMossa;
-		System.out.println("Giocatore "+mioId+": inizio");
-		for(int j=0; j<numMani; j++) {
-			System.out.println("Giocatore "+mioId+": aspetto");
-			try {
-				laPartita.aspettaTurno(mioId);
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
-			SituazionePartita statoPartita=laPartita.leggiSituazione();
+		InetAddress add = InetAddress.getByName(null);
+		int port = 8080;
+		Socket socket = new Socket(add, port);
+		ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+		ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+		out.writeObject("numMani");
+		numMani = (int) in.readObject();
+		System.out.println("Giocatore " + mioId + ": inizio");
+		for (int j = 0; j < numMani; j++) {
+			System.out.println("Giocatore " + mioId + ": aspetto");
+			//laPartita.aspettaTurno(mioId);
+			out.writeObject("aspetta");
+			out.writeObject(mioId);
+			//SituazionePartita statoPartita=laPartita.leggiSituazione();
 			// la mossa dovrebbe tenere conto della situazione, ma semplifichiamo...
-			miaMossa=1+rnd.nextInt(9);
-			System.out.println("Giocatore "+mioId+": gioco "+miaMossa);
-			laPartita.giocata(mioId, miaMossa);
+			miaMossa = 1 + rnd.nextInt(9);
+			System.out.println("Giocatore " + mioId + ": gioco " + miaMossa);
+			//laPartita.giocata(mioId, miaMossa);
+			out.writeObject("gioca");
+			out.writeObject(mioId);
 		}
+
+		out.writeObject("END");
+		System.out.println("Il giocatore" + mioId + "ha terminato");
+		out.flush();
+		out.close();
 	}
 
+	public static void main(String[] args) throws IOException, ClassNotFoundException {
+		for(int i = 0; i<4; i++){
+			new Giocatore(i).exec(i);
+		}
+	}
 }

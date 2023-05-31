@@ -1,6 +1,8 @@
 package soluzionesocket;
 
-public class SituazionePartita {
+import java.io.Serializable;
+
+public class SituazionePartita implements Serializable {
 	// irrilevante per il problema dato
 	String situazione;
 	SituazionePartita(){
