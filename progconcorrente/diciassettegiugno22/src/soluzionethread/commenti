@@ -1,3 +1,0 @@
--Es.1
-Definiamo prima la classe Giocatore che simulerà i thread.
-Ogni giocatore possiede il proprio id, la partita a cui partecipa e una barrier
