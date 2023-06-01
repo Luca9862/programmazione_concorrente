@@ -3,7 +3,7 @@ package soluzionesocket;
 import java.io.Serializable;
 import java.util.Random;
 
-public class Partita implements Serializable {
+public class Partita {
 	int numMani;
 	Random rnd;
 	int numGiocatori;
@@ -57,7 +57,9 @@ public class Partita implements Serializable {
 			return false;
 	}
 	public synchronized void aspettaTurno(int idGiocatore) throws InterruptedException {
-		while(idGiocatore != ordineGiocatoriMano[numGiocateManoCorrente])
+		while(idGiocatore != ordineGiocatoriMano[numGiocateManoCorrente]) {
+			System.out.println("Ho giocato" + idGiocatore + " ora faccio la wait e aspetto");
 			wait();
+		}
 	}
 }

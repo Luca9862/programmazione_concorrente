@@ -1,4 +1,4 @@
-package soluzionesocket;
+package soluzionesocketProf;
 
 import java.io.*;
 import java.net.*;

@@ -1,46 +1,28 @@
 package soluzionesocket;
 
-import java.io.*;
-import java.net.*;
-import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 
-public class Produttore {
-	Elemento v;
+public class Produttore extends Thread {
+	Coda buffer;
 	int numIterations;
-	Random rnd;
-	String name;
-	private ObjectInputStream in;
-	private ObjectOutputStream out;
-	public Produttore(int n){
+	public Produttore(String s, Coda c, int n){
+		super(s);
+		this.buffer=c;
 		numIterations=n;
-		rnd=new Random();
-		name="prod"+rnd.nextInt(1000);
 	}
-	private void exec() throws IOException, ClassNotFoundException {
-		InetAddress addr = InetAddress.getByName(null);
-		Socket s=new Socket(addr, 8999);
-		out = new ObjectOutputStream(s.getOutputStream());
-		in = new ObjectInputStream(s.getInputStream());
+	public void run(){
 		for(int i=0; i<numIterations; i++){
-			out.writeObject("set");
-			Elemento el= new Elemento(name+i, 1000-i);
-			out.writeObject(el);
-			System.out.println(name+": put "+el);
 			try {
-				Thread.sleep(rnd.nextInt(2000));
+				Thread.sleep(ThreadLocalRandom.current().nextInt(300));
 			} catch (InterruptedException e) { }
+			try {
+				buffer.setItem(new Elemento("el_"+i, ThreadLocalRandom.current().nextInt(300)));
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
 		}
-		out.writeObject("END");
-		out.flush();
-		System.out.println(name+": termino");
-		s.close();
-	}
-	public static void main(String[] args) {
-		try {
-			new Produttore(4).exec();
-		} catch (ClassNotFoundException | IOException e) {
-			System.out.println("Consumatore KO");
-		} 
+		System.out.println(this.getName()+": termino");
 	}
 }
+
 

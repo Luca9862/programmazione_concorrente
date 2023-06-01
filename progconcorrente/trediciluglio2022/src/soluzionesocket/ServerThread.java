@@ -2,7 +2,6 @@ package soluzionesocket;
 
 import java.io.*;
 import java.net.Socket;
-import java.util.Objects;
 
 public class ServerThread extends Thread{
     Socket socket;
@@ -15,10 +14,11 @@ public class ServerThread extends Thread{
         this.partita = p;
         in = new ObjectInputStream(socket.getInputStream());
         out = new ObjectOutputStream(socket.getOutputStream());
+        start();
     }
     private void exec(String str) throws IOException, ClassNotFoundException, InterruptedException {
         int id = 0;
-        if(str.equals("aspetta")){
+        if(str.equals("aspettaTurno")){
             id = (int)in.readObject();
             this.partita.aspettaTurno(id);
             out.writeObject(partita.leggiSituazione());

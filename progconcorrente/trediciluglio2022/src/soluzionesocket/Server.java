@@ -5,7 +5,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 public class Server {
-    public static final int PORT = 8089;
+    public static final int PORT = 8099;
     public static final int num_giocatori = 4;
 
     public static void main(String[] args) throws IOException {
@@ -15,7 +15,7 @@ public class Server {
             while (true) {
                 Socket s = ss.accept();
                 System.out.println("Server pronto");
-                new ServerThread(s, partita).start();
+                new ServerThread(s, partita);
             }
         } finally {
             ss.close();

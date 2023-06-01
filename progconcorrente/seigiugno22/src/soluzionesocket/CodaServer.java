@@ -1,22 +1,22 @@
 package soluzionesocket;
 
-import java.net.*;
-import java.io.*;
+import soluzionesocketProf.CodaServerThread;
+
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 
 public class CodaServer {
-	static final int PORT = 8999;
-	public static void main(String[] args) throws IOException {
-		ServerSocket s = new ServerSocket(PORT);
-		Coda laCoda=new Coda(8);
-		System.out.println("Server Started");
-		try {
-			while (true) {
-				Socket socket = s.accept();
-				System.out.println("Server accepts connection");
-				new CodaServerThread(socket, laCoda);
-			}
-		} finally {
-			s.close();
-		}
-	}
+
+    public static final int PORT = 2601;
+
+    public static void main(String[] args) throws IOException {
+        ServerSocket ss = new ServerSocket(PORT);
+        Coda coda = new Coda(4);
+        while(true){
+            Socket socket = ss.accept();
+            System.out.println("SERVER CONNESSO");
+            new CodaThread(socket, coda);
+        }
+    }
 }
