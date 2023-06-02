@@ -1,27 +1,47 @@
 package soluzionesocket;
 
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.InetAddress;
+import java.net.Socket;
+import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class Produttore extends Thread {
-	Coda buffer;
+public class Produttore {
 	int numIterations;
-	public Produttore(String s, Coda c, int n){
-		super(s);
-		this.buffer=c;
+
+	Random rnd;
+	ObjectOutputStream out;
+	ObjectInputStream in;
+	public Produttore(int n){
+		rnd = new Random();
 		numIterations=n;
 	}
-	public void run(){
+	public void exec() throws IOException {
+		InetAddress addr = InetAddress.getByName(null);
+		Socket s = new Socket(addr, 8080);
+		in = new ObjectInputStream(s.getInputStream());
+		out = new ObjectOutputStream(s.getOutputStream());
 		for(int i=0; i<numIterations; i++){
+			out.writeObject("Produzione");
+			Elemento elemento = new Elemento("prod " + i, rnd.nextInt());
+			out.writeObject(elemento);
 			try {
-				Thread.sleep(ThreadLocalRandom.current().nextInt(300));
+				Thread.sleep(rnd.nextInt(2000));
 			} catch (InterruptedException e) { }
-			try {
-				buffer.setItem(new Elemento("el_"+i, ThreadLocalRandom.current().nextInt(300)));
-			} catch (InterruptedException e) {
-				throw new RuntimeException(e);
-			}
+			//buffer.setItem(new Elemento("el_"+i, ThreadLocalRandom.current().nextInt(300)));
 		}
-		System.out.println(this.getName()+": termino");
+		System.out.println("Produttore: termino");
+		s.close();
+	}
+
+	public static void main(String[] args) {
+		try {
+			new Produttore(4).exec();
+		} catch (IOException e) {
+			System.out.println("Consumatore KO");
+		}
 	}
 }
 
