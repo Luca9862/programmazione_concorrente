@@ -23,10 +23,8 @@ public class Consumatore {
 		Elemento e;
 		InetAddress addr = InetAddress.getByName(null);
 		Socket s = new Socket(addr, 8080);
-		System.out.println("1");
 		out = new ObjectOutputStream(s.getOutputStream());
 		in = new ObjectInputStream(s.getInputStream());
-		System.out.println(2);
 		for(int i=0; i<numIterations; i++){
 			out.writeObject("Consumazione");
 			e = (Elemento) in.readObject();
