@@ -6,7 +6,7 @@ public class Gioco {
 	private int estratto;
 	private Random rnd;
 	public final int MAX_NUM=10;
-	private boolean scommesseAperte=false;
+	private boolean scommesseAperte;
 	Gioco(){
 		estratto=-1;
 		rnd=new Random();

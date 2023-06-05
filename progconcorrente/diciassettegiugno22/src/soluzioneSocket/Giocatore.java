@@ -35,6 +35,7 @@ public class Giocatore {
 					out.writeObject(this.mioId);
 					out.writeObject(miaScommessa);
 					fatto = (boolean) in.readObject();
+					System.out.println(fatto);
 					//fatto=ilGioco.piazzaScommessa(mioId, miaScommessa);
 				}catch(IOException | ClassNotFoundException e){
 					throw new RuntimeException(e);

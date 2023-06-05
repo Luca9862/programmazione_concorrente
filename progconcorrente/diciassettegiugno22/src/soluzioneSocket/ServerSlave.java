@@ -30,15 +30,16 @@ public class ServerSlave extends Thread {
             out.writeObject(esito);
         }
         if(comando.equals("leggiEstratto")){
+            gioco.faiEstrazione();
             estratto = gioco.leggiEstratto(); //si blocca appena esegue questo
             out.writeObject(estratto);
             System.out.println("Estratto: " + estratto);
         }
 
-        if(comando.equals("faiEstrazione")){
+        /*if(comando.equals("faiEstrazione")){
             gioco.faiEstrazione();
             out.writeObject("Estrazione effettuata");
-        }
+        }*/
     }
 
     public void run() {
