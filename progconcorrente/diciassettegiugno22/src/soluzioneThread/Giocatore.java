@@ -10,7 +10,6 @@ public class Giocatore extends Thread{
     Partita partita;
     CyclicBarrier c1;
     CyclicBarrier c2;
-
     Random rnd;
 
 
