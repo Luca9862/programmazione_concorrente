@@ -12,7 +12,11 @@ public class Lettore extends Thread {
 	}
 	public void run(){
 		for(int i=0; i<numIterations; i++){
-			v=buffer.readItem();
+			try {
+				v=buffer.readItem();
+			} catch (InterruptedException e) {
+				throw new RuntimeException(e);
+			}
 			try {
 				Thread.sleep(ThreadLocalRandom.current().nextInt(300));
 			} catch (InterruptedException e) { }
