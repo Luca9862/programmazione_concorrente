@@ -49,33 +49,27 @@ public class ServerThread extends Thread {
     }
 
     public void run() {
-        boolean finito = false;
-        String str;
-        while (!finito) {
-            try {
-                str = (String) in.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-            if (str.equals("END"))
-                finito = true;
-            else {
-                try {
-                    str = (String) in.readObject();
-                } catch (IOException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    exec(str);
-                } catch (IOException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+        boolean finito=false;
+        String str=" ";
         try {
-            s.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            while (!finito) {
+                str = (String) in.readObject();
+                if (str.equals("END")) {
+                    finito=true;
+                } else {
+                    System.out.println("executing: " + str);
+                    exec(str);
+                }
+            }
+            System.out.println("closing...");
+        } catch (IOException | ClassNotFoundException e) {
+            System.err.println("IO Exception on "+str);
+        } finally {
+            try {
+                socket.close();
+            } catch (IOException e) {
+                System.err.println("Socket not closed");
+            }
         }
     }
 }
