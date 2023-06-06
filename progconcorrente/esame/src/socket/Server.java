@@ -1,24 +1,23 @@
 package socket;
 
-
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+
 public class Server {
-    public static final int PORT = 8080;
+    private final static int SERVER_PORT = 8080;
 
     public static void main(String[] args) throws IOException {
-        ServerSocket ss = new ServerSocket(PORT);
-        OggettoCondiviso oc = new OggettoCondiviso();//qui solitamente si passa l'oggetto condiviso (coda, partita...)
+        ServerSocket serverSocket = new ServerSocket(SERVER_PORT);
+        OggettoCondiviso oc = new OggettoCondiviso();
         try {
-            System.out.println("Server in ascolto sulla porta " + PORT);
-            while(true){
-                Socket s = ss.accept();
-                System.out.println("Connessione stabilita con " + s.getInetAddress());
-                new ServerThread(s, oc);
+            while (true) {
+                Socket cSocket = serverSocket.accept();
+                System.out.println("server accepted connection");
+                new ServerSlave(cSocket, oc);
             }
-        } finally {
-            ss.close();
+        }finally {
+            serverSocket.close();
         }
     }
 }

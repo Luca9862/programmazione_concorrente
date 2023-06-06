@@ -1,5 +1,6 @@
 package rmi;
 
+
 public class OggettoCondiviso {
 
     public void metodo1(){

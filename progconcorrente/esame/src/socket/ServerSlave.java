@@ -14,14 +14,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ServerThread extends Thread {
-    Socket s;
+public class ServerSlave extends Thread {
+    Socket socket;
     OggettoCondiviso oc;
     ObjectInputStream in;
     ObjectOutputStream out;
 
-    public ServerThread(Socket s, OggettoCondiviso r) throws IOException {
-        this.s = s;
+    public ServerSlave(Socket s, OggettoCondiviso r) throws IOException {
+        this.socket = s;
         this.oc = r;
         in = new ObjectInputStream(s.getInputStream());
         out = new ObjectOutputStream(s.getOutputStream());
@@ -49,27 +49,30 @@ public class ServerThread extends Thread {
     }
 
     public void run() {
-        boolean finito=false;
-        String str=" ";
+        String command = "";
+        boolean finito = false;
+        System.out.println("slave started");
         try {
-            while (!finito) {
-                str = (String) in.readObject();
-                if (str.equals("END")) {
-                    finito=true;
-                } else {
-                    System.out.println("executing: " + str);
-                    exec(str);
+            while(!finito) {
+                command=(String) in.readObject();
+                System.out.println("command " + command + " received");
+                if(command.equals("END")) {
+                    finito = true;
+                }
+                else {
+                    try {
+                        exec(command);
+                    } catch (ClassNotFoundException | IOException e) {
+                        e.printStackTrace();
+                    }
                 }
             }
-            System.out.println("closing...");
-        } catch (IOException | ClassNotFoundException e) {
-            System.err.println("IO Exception on "+str);
-        } finally {
+        } catch (ClassNotFoundException | IOException e1) {
+            e1.printStackTrace();
+        }finally {
             try {
                 socket.close();
-            } catch (IOException e) {
-                System.err.println("Socket not closed");
-            }
+            } catch (IOException e) { }
         }
     }
 }
