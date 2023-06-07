@@ -122,25 +122,26 @@ private void exec(String str) throws IOException, ClassNotFoundException {
 ## Procedura per RMI
 
 1. Copiare codice da Socket
-2. Cancellare ServerMain e ServerThread.
+2. Cancellare `ServerMain` e `ServerThread`.
 3. Nel Client:
    1. Togliere tutto quello che riguarda i socket
-   2. Registry registro = LocateRegistry.getRegistry(1099);
-   3. ServerInterface serverInt;
-   4. serverInt = (ServerInterface) registro.lookup(“nome”)
+   2. `Registry registro = LocateRegistry.getRegistry(1099);`
+   3. ` ServerInterface serverInt;`
+   4. `serverInt = (ServerInterface) registro.lookup(“nome”)`
    5. Creare variabile oggettoCondiviso.
-4. Creare ServerInterface
-   1. Prendere tutti i metodi della classe condivisa
-   2. Togliere tutti i synchronized
-   3. Aggiungere a tutti I metodi: throws RemoteException
-   4. IMPORTANTE: tutti i metodi devono essere public
-5. Creare ServerImpl
-   1. extends UnicastRemoteObject implements ServerInterface
-      1. public ServerImpl() throws RemoteException {
+4. Creare `ServerInterface`
+   1. Prendere tutti i metodi della classe condivisa;
+   2. Togliere tutti i `synchronized`;
+   3. Aggiungere a tutti I metodi: `throws RemoteException`
+   4. **IMPORTANTE**: tutti i metodi devono essere public
+5. Creare `ServerImpl`
+   1. `extends UnicastRemoteObject implements ServerInterface`;
+      1. ````public ServerImpl() throws RemoteException {
          super();
          oggettoCondiviso = new classeCondivisa();
-         }
-6. Si copiano tutti I metodi che si trovano dentro ServerInterface e si fa il return nel caso fossero
+         }```
+         ````
+6. Si copiano tutti I metodi che si trovano dentro `ServerInterface` e si fa il return nel caso fossero
    diversi da void.
 7. Nel main:
 
