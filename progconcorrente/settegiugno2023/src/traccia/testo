@@ -1,0 +1,7 @@
+Si consideri il codice dato, per la gestione di un semplice deposito di dati.
+
+Si renda il programma multi-thread.
+Ciascun thread accede ai dati in scrittura (per aggiungere, modificare o cancellare nuovi dati) e in lettura (per cercare l’informazione corrispondente ad una data chiave).
+Si modifichi la funzione di ricerca in modo che se un thread cerca l’informazione corrispondente ad una chiave non presente, si metta in attesa che qualche altro thread aggiunga il dato cercato.
+
+Evitare corse critiche e altri problemi tipici della programmazione concorrente.
