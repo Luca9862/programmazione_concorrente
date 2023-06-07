@@ -54,6 +54,8 @@ public class Clients {
 			} catch (InterruptedException e) { }
 		}
 		System.out.println("Produttore: termino");
+        out.writeObject("END");
+        out.flush();
 		s.close();
 	}
 

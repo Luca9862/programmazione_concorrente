@@ -14,14 +14,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 
-public class ServerThread extends Thread {
-    Socket s;
+public class ServerSlave extends Thread {
+    Socket socket;
     OggettoCondiviso oc;
     ObjectInputStream in;
     ObjectOutputStream out;
 
-    public ServerThread(Socket s, OggettoCondiviso r) throws IOException {
-        this.s = s;
+    public ServerSlave(Socket s, OggettoCondiviso r) throws IOException {
+        this.socket = s;
         this.oc = r;
         in = new ObjectInputStream(s.getInputStream());
         out = new ObjectOutputStream(s.getOutputStream());
@@ -49,33 +49,30 @@ public class ServerThread extends Thread {
     }
 
     public void run() {
+        String command = "";
         boolean finito = false;
-        String str;
-        while (!finito) {
-            try {
-                str = (String) in.readObject();
-            } catch (IOException | ClassNotFoundException e) {
-                throw new RuntimeException(e);
-            }
-            if (str.equals("END"))
-                finito = true;
-            else {
-                try {
-                    str = (String) in.readObject();
-                } catch (IOException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-                try {
-                    exec(str);
-                } catch (IOException | ClassNotFoundException e) {
-                    throw new RuntimeException(e);
-                }
-            }
-        }
+        System.out.println("slave started");
         try {
-            s.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+            while(!finito) {
+                command=(String) in.readObject();
+                System.out.println("command " + command + " received");
+                if(command.equals("END")) {
+                    finito = true;
+                }
+                else {
+                    try {
+                        exec(command);
+                    } catch (ClassNotFoundException | IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        } catch (ClassNotFoundException | IOException e1) {
+            e1.printStackTrace();
+        }finally {
+            try {
+                socket.close();
+            } catch (IOException e) { }
         }
     }
 }

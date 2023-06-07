@@ -1,5 +1,3 @@
-package traccia;
-
 public class Coda {
 	private int BUFFERSIZE;
 	private int numItems = 0;
