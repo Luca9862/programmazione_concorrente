@@ -27,7 +27,7 @@ public class Dati implements DatiInterface{
         return iDati.containsKey(key);
     }
     public synchronized String trovaDato(String key){
-    	while(iDati.contains(key)) {
+    	while(!iDati.contains(key)) {
     		try {
 				wait();
 			} catch (InterruptedException e) {
